@@ -17,7 +17,7 @@ from robusta_krr import formatters as concrete_formatters  # noqa: F401
 from robusta_krr.core.abstract import formatters
 from robusta_krr.core.abstract.strategies import BaseStrategy
 from robusta_krr.core.models.config import Config
-from robusta_krr.core.runner import Runner
+from robusta_krr.core.runner import Runner, PeriodicRunner
 from robusta_krr.utils.version import get_version
 
 app = typer.Typer(
@@ -315,7 +315,7 @@ def load_commands() -> None:
                 except ValidationError:
                     logger.exception("Error occured while parsing arguments")
                 else:
-                    runner = Runner()
+                    runner = PeriodicRunner()
                     exit_code = asyncio.run(runner.run())
                     raise typer.Exit(code=exit_code)
 

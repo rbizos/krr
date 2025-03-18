@@ -7,6 +7,9 @@ import warnings
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional, Union
 from datetime import timedelta, datetime
+
+from fastapi import FastAPI
+from prometheus_client import start_http_server
 from prometrix import PrometheusNotFound
 from rich.console import Console
 from slack_sdk import WebClient
@@ -21,6 +24,7 @@ from robusta_krr.utils.intro import load_intro_message
 from robusta_krr.utils.progress_bar import ProgressBar
 from robusta_krr.utils.version import get_version, load_latest_version
 from robusta_krr.utils.patch import create_monkey_patches
+from pprint import pp
 
 logger = logging.getLogger("krr")
 
@@ -354,3 +358,20 @@ class Runner:
             return 1  # Exit with error
         else:
             return 0  # Exit with success
+
+
+
+
+
+class PeriodicRunner(Runner):
+    """
+    quick and dirty for the demo of having metrics updated periodically
+    """
+
+    async def run(self) -> int:
+        start_http_server(8000)
+        while True:
+            await super().run()
+            await asyncio.sleep(60)
+
+
